@@ -1,12 +1,12 @@
-# GitHub Actions CI/CD Workflow for Chamran Ahvaz School Website
+# GitHub Actions CI/CD — Chamran Ahvaz School Website
 
 name: Deploy to Production
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
-    branches: [main]
+    branches: [master, main]
 
 jobs:
   build-and-deploy:
@@ -40,16 +40,15 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
 
       - name: Deploy to Vercel
-        if: github.ref == 'refs/heads/main'
-        run: |
-          npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --project-id ${{ secrets.VERCEL_PROJECT_ID }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.VERCEL_TOKEN != ''
+        run: npx vercel --prod --token "${{ secrets.VERCEL_TOKEN }}"
         env:
           CI: true
 
       - name: Invalidate Cloudflare cache
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ZONE_ID != ''
         run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"purge_all": true}'
