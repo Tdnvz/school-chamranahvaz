@@ -1,64 +1,50 @@
-"""Utility functions for the Chamran Ahvaz School website."""
-import { format, formatDistanceToNow, parseISO } from 'date-fns'
-import { fa } from 'date-fns-jalali/locale'
-import type { Locale } from 'next-intl'
+// توابع کمکی — بدون وابستگی خارجی
 
-export function formatDate(date: string | Date, locale: Locale = 'fa'): string {
-  const dateObj = typeof date === 'string' ? parseISO(date) : date
-  
-  if (locale === 'fa') {
-    return format(dateObj, 'PPP', { locale: fa })
-  }
-  
-  return format(dateObj, 'PPP')
+/** تبدیل ارقام لاتین به فارسی */
+export function toPersianDigits(value: string | number): string {
+  return String(value).replace(/[0-9]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
 }
 
-export function formatRelativeTime(date: string | Date, locale: Locale = 'fa'): string {
-  const dateObj = typeof date === 'string' ? parseISO(date) : date
-  
-  if (locale === 'fa') {
-    return formatDistanceToNow(dateObj, { addSuffix: true, locale: fa })
-  }
-  
-  return formatDistanceToNow(dateObj, { addSuffix: true })
-}
-
-export function getPersianDigits(str: string): string {
-  return str.replace(/\d/g, (digit) => {
-    return '۰۱۲۳۴۵۶۷۸۹'[parseInt(digit)]
-  })
-}
-
+/** قالب‌بندی عدد با جداکنندهٔ هزارگان فارسی */
 export function formatNumber(num: number): string {
-  return getPersianDigits(num.toString())
+  return toPersianDigits(new Intl.NumberFormat('fa-IR').format(num))
 }
 
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout
-  
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), wait)
+/** نمایش تاریخ فارسی (شمسی) */
+export function formatDateFa(input: string | Date): string {
+  const date = typeof input === 'string' ? new Date(input) : input
+  try {
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date)
+  } catch {
+    return date.toLocaleDateString('fa-IR')
   }
 }
 
-export function isPersian(text: string): boolean {
-  return /[؀-ۿ]/.test(text)
+/** استخراج ساب‌دامنه از هاست */
+export function extractSubdomain(host: string): string | null {
+  const clean = host.replace(/:\d+$/, '').toLowerCase()
+  const parts = clean.split('.')
+  if (parts.length < 3) return null
+  const candidate = parts[0]
+  if (candidate === 'www' || candidate === 'app' || candidate === 'api') return null
+  return candidate
 }
 
-export function extractSubdomain(hostname: string): string {
-  const domain = hostname.split('.')[0]
-  return domain === 'www' ? 'chamranahvaz' : domain
-}
-
-export function generateSlug(text: string): string {
+/** حذف فاصله‌های اضافه و ساخت اسلاگ ساده */
+export function slugify(text: string): string {
   return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
     .replace(/\s+/g, '-')
+    .replace(/[^؀-ۿa-zA-Z0-9-]/g, '')
     .replace(/-+/g, '-')
-    .trim('-')
+    .toLowerCase()
+}
+
+/** تعیین راست‌چین بودن زبان */
+export function isRtl(locale: string): boolean {
+  return locale.startsWith('fa')
 }

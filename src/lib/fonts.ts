@@ -1,18 +1,9 @@
-"""Persian font configurations for Next.js."""
-import { Inter } from 'next/font/google'
-import localFont from 'next/font/local'
+import { Vazirmatn } from 'next/font/google'
 
-export const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-export const vazirmatn = localFont({
-  src: './fonts/Vazirmatn-Thin.woff2',
-  weight: '100',
-  style: 'normal',
+// فونت وزیرمتن — پشتیبانی کامل از فارسی و لاتین
+export const vazirmatn = Vazirmatn({
+  subsets: ['arabic', 'latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-vazirmatn',
   display: 'swap',
-  fallback: ['Arial', 'Helvetica', 'sans-serif'],
 })

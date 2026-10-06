@@ -1,25 +1,44 @@
-"""TypeScript definitions for Supabase database types."""
-import type { Database } from './supabase'
-
-export type Tables = Database['public']['Tables']
-export type Insertables = {
-  [Key in keyof Tables as `Insert${Capitalize<Key extends string ? Key : never>}`]: Tables[Key] extends { Insert: infer I } ? I : never
-}
-export type Updates = {
-  [Key in keyof Tables as `Update${Capitalize<Key extends string ? Key : never>}`]: Tables[Key] extends { Update: infer U } ? U : never
-}
-export type Row = {
-  [Key in keyof Tables as `${Key & string}`]: Tables[Key] extends { Row: infer R } ? R : never
+export interface ClassRow {
+  id: string
+  name: string
+  grade: 'elementary' | 'first' | 'second'
+  gender: 'boys' | 'girls'
+  subdomain: string
+  capacity: number
+  teacher_id: string | null
+  created_at?: string
 }
 
-export type Class = Row['classes']
-export type Teacher = Row['teachers']
-export type SchoolSettings = Row['school_settings']
+export interface TeacherRow {
+  id: string
+  name: string
+  subject: string
+  title: string
+  bio: string
+  image_url: string | null
+  subdomain: string
+  email: string
+  phone: string
+  availability: string | null
+  created_at?: string
+}
 
-export type ClassInsert = Insertables['Insertclasses']
-export type TeacherInsert = Insertables['Insertteachers']
-export type SchoolSettingsInsert = Insertables['InsertSchoolSettings']
-
-export type ClassUpdate = Updates['Updateclasses']
-export type TeacherUpdate = Updates['Updateteachers']
-export type SchoolSettingsUpdate = Updates['UpdateSchoolSettings']
+export interface Database {
+  public: {
+    Tables: {
+      classes: {
+        Row: ClassRow
+        Insert: Omit<ClassRow, 'created_at'>
+        Update: Partial<Omit<ClassRow, 'created_at'>>
+      }
+      teachers: {
+        Row: TeacherRow
+        Insert: Omit<TeacherRow, 'created_at'>
+        Update: Partial<Omit<TeacherRow, 'created_at'>>
+      }
+    }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+  }
+}
