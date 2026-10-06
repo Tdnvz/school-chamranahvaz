@@ -1,0 +1,15 @@
+[Unit]
+Description=Chamran Ahvaz school website (Next.js production)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/school-chamranahvaz
+ExecStart=/usr/bin/node node_modules/.bin/next start -p 3111
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=HOSTNAME=0.0.0.0
+
+[Install]
+WantedBy=multi-user.target

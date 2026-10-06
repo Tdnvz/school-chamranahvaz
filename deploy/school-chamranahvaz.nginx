@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    server_name ghjs.tdnvzgg66.shop dtga.tdnvzgg66.shop avel.tdnvzgg66.shop avvdy.tdnvzgg66.shop otv2.tdnvzgg66.shop ovyi.tdnvzgg66.shop;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 8443 ssl;
+    http2 on;
+    server_name ghjs.tdnvzgg66.shop dtga.tdnvzgg66.shop avel.tdnvzgg66.shop avvdy.tdnvzgg66.shop otv2.tdnvzgg66.shop ovyi.tdnvzgg66.shop;
+
+    ssl_certificate /root/.acme.sh/tdnvzgg66.shop_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/tdnvzgg66.shop_ecc/tdnvzgg66.shop.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_pass http://127.0.0.1:3111;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_cache_control;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+    }
+}
