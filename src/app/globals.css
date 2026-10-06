@@ -1,0 +1,39 @@
+"""Root layout for the Chamran Ahvaz School website."""
+import './globals.css'
+import { inter, vazirmatn } from '@/lib/fonts'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { locales, Locale } from '@/lib/i18n/config'
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s - مدرسه چمران اهواز',
+    default: 'مدارس چمران اهواز',
+  },
+  description: 'وب سایت رسمی مدارس چمران اهواز - ۶ ساب دامنه برای دبستان پسرانه، دبستان دخترانه، متوسطه اول پسرانه، متوسطه اول دخترانه، متوسطه دوم پسرانه و متوسطه دوم دخترانه',
+  metadataBase: new URL('https://chamranahvaz.ir'),
+}
+
+interface RootLayoutProps {
+  children: React.ReactNode
+  params: {
+    locale: Locale
+  }
+}
+
+export default function RootLayout({ children, params: { locale } }: RootLayoutProps) {
+  // Validate locale
+  if (!locales.includes(locale)) {
+    notFound()
+  }
+
+  return (
+    <html lang={locale} dir={locale === 'fa' ? 'rtl' : 'ltr'} className={`${inter.variable} ${vazirmatn.variable}`}>
+      <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
+        <div className="relative flex min-h-screen flex-col">
+          {children}
+        </div>
+      </body>
+    </html>
+  )
+}

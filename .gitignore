@@ -1,0 +1,1 @@
+{"version": 2, "includes": ["src/**/*", "*.{js,ts,tsx,json,md}", "!.next/**", "node_modules/**"], "exclude": ["**/*.map", "**/*.log"]}
