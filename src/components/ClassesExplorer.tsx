@@ -2,13 +2,20 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import type { ClassRow } from '@/lib/data'
-import { GRADE_LABELS } from '@/lib/schools'
+import type { School } from '@/lib/schools'
+import { GRADE_LABELS, STAGE_GRADES } from '@/lib/schools'
 import { toPersianDigits, formatNumber } from '@/lib/utils'
 import { MagnifyingGlass, Users, GraduationCap } from './icons'
 
 const PAGE_SIZE = 12
 
-export default function ClassesExplorer({ initialClasses }: { initialClasses: ClassRow[] }) {
+export default function ClassesExplorer({
+  initialClasses,
+  school,
+}: {
+  initialClasses: ClassRow[]
+  school: School
+}) {
   const [q, setQ] = useState('')
   const [grade, setGrade] = useState<string>('all')
   const [page, setPage] = useState(1)
@@ -28,7 +35,8 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
       const okTerm =
         !term ||
         c.name.toLowerCase().includes(term) ||
-        GRADE_LABELS[c.grade]?.includes(term) ||
+        (GRADE_LABELS[c.grade] ?? '').includes(term) ||
+        (c.track ?? '').includes(term) ||
         (c.gender === 'boys' ? 'پسرانه' : 'دخترانه').includes(term)
       return okGrade && okTerm
     })
@@ -64,12 +72,12 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
               setPage(1)
             }}
             className="input"
-            aria-label="فیلتر مقطع"
+            aria-label="فیلتر پایه"
           >
-            <option value="all">همهٔ مقاطع</option>
-            <option value="elementary">ابتدایی</option>
-            <option value="first">متوسطهٔ اول</option>
-            <option value="second">متوسطهٔ دوم</option>
+            <option value="all">همهٔ پایه‌ها</option>
+            {STAGE_GRADES[school.stage].map((g) => (
+              <option key={g} value={g}>{GRADE_LABELS[g]}</option>
+            ))}
           </select>
 
           <button
@@ -99,14 +107,14 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
           {slice.map((c) => (
             <article key={c.id} className="card animate-fadeUp p-5">
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-lg font-bold">کلاس {c.name}</h3>
-                <span className="chip">{GRADE_LABELS[c.grade]}</span>
+                <h3 className="text-lg font-bold">{c.name}</h3>
+                <span className="chip">{GRADE_LABELS[c.grade] ?? c.grade}</span>
               </div>
               <dl className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-school-500" />
                   <dt className="sr-only">مقطع</dt>
-                  <dd>{GRADE_LABELS[c.grade]}</dd>
+                  <dd>{GRADE_LABELS[c.grade] ?? c.grade} • کلاس {toPersianDigits(c.classNo)}{c.track ? ` • ${c.track}` : ''}</dd>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-school-500" />

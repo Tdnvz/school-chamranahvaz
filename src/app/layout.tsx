@@ -1,24 +1,41 @@
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 import { vazirmatn } from '@/lib/fonts'
-import { BASE_DOMAIN } from '@/lib/schools'
+import { BASE_DOMAIN, getSchool, STAGE_LABELS } from '@/lib/schools'
+import { extractSubdomain } from '@/lib/utils'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 import './globals.css'
 
-export const metadata: Metadata = {
-  metadataBase: new URL(`https://${BASE_DOMAIN}`),
-  title: {
-    default: 'مدارس چمران اهواز',
-    template: '%s | مدارس چمران اهواز',
-  },
-  description:
-    'وب‌سایت رسمی مدارس چمران اهواز — دبستان و متوسطهٔ اول و دوم، پسرانه و دخترانه',
-  keywords: ['مدرسه', 'چمران', 'اهواز', 'دبستان', 'متوسطه', 'کلاس', 'معلم'],
-  openGraph: {
-    type: 'website',
-    locale: 'fa_IR',
-    siteName: 'مدارس چمران اهواز',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const host = headers().get('host') ?? ''
+  const sub = extractSubdomain(host)
+  const school = sub ? getSchool(sub) : null
+
+  // داخل هر ساب‌دامنه فقط همان مدرسه معرفی می‌شود
+  const description = school
+    ? `${school.titleFa} چمران اهواز — ${STAGE_LABELS[school.stage]}، ${
+        school.gender === 'boys' ? 'ویژهٔ پسران' : 'ویژهٔ دختران'
+      }`
+    : 'وب‌سایت رسمی مدارس چمران اهواز — دبستان و متوسطهٔ اول و دوم، پسرانه و دخترانه'
+
+  return {
+    metadataBase: new URL(`https://${BASE_DOMAIN}`),
+    title: {
+      default: school ? school.titleFa : 'مدارس چمران اهواز',
+      template: `%s | ${school ? school.titleFa : 'مدارس چمران اهواز'}`,
+    },
+    description,
+    keywords: school
+      ? ['مدرسه', 'چمران', 'اهواز', school.titleFa, STAGE_LABELS[school.stage], 'کلاس', 'معلم']
+      : ['مدرسه', 'چمران', 'اهواز', 'دبستان', 'متوسطه', 'کلاس', 'معلم'],
+    openGraph: {
+      type: 'website',
+      locale: 'fa_IR',
+      siteName: school ? school.titleFa : 'مدارس چمران اهواز',
+      description,
+    },
+  }
 }
 
 export const viewport: Viewport = {

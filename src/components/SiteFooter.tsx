@@ -1,22 +1,42 @@
 import Link from 'next/link'
-import { BASE_DOMAIN, SCHOOLS } from '@/lib/schools'
+import { headers } from 'next/headers'
+import { BASE_DOMAIN, SCHOOLS, getSchool, STAGE_LABELS, STAGE_GRADES, GRADE_LABELS } from '@/lib/schools'
+import { extractSubdomain } from '@/lib/utils'
 
 export default function SiteFooter() {
+  const host = headers().get('host') ?? ''
+  const sub = extractSubdomain(host)
+  const school = sub ? getSchool(sub) : null
+
+  // داخل هر مقطع فقط همان مقطع نمایش داده می‌شود
+  const shown = school
+    ? SCHOOLS.filter((s) => s.stage === school.stage)
+    : SCHOOLS
+
+  const stageText = school
+    ? `${STAGE_LABELS[school.stage]} ${school.gender === 'boys' ? 'پسرانه' : 'دخترانه'} — پایه‌های ${STAGE_GRADES[school.stage]
+        .map((g) => GRADE_LABELS[g])
+        .join('، ')}`
+    : 'آموزش با کیفیت در مقاطع ابتدایی، متوسطهٔ اول و متوسطهٔ دوم، در دو بخش پسرانه و دخترانه.'
+
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
       <div className="container-page grid gap-8 py-10 sm:grid-cols-3">
         <div>
-          <h3 className="text-sm font-bold">مدارس چمران اهواز</h3>
+          <h3 className="text-sm font-bold">
+            {school ? school.titleFa : 'مدارس چمران اهواز'}
+          </h3>
           <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-            آموزش با کیفیت در مقاطع ابتدایی، متوسطهٔ اول و متوسطهٔ دوم،
-            در دو بخش پسرانه و دخترانه.
+            {stageText}
           </p>
         </div>
 
         <div>
-          <h3 className="text-sm font-bold">بخش‌ها</h3>
+          <h3 className="text-sm font-bold">
+            {school ? 'بخش‌های همین مقطع' : 'بخش‌ها'}
+          </h3>
           <ul className="mt-3 space-y-1.5">
-            {SCHOOLS.map((s) => (
+            {shown.map((s) => (
               <li key={s.subdomain}>
                 <a
                   href={`https://${s.domain}`}
@@ -47,7 +67,7 @@ export default function SiteFooter() {
 
       <div className="border-t border-slate-100 py-4 dark:border-slate-800">
         <p className="container-page text-center text-xs text-slate-400 dark:text-slate-500">
-          © {new Date().getFullYear()} مدارس چمران اهواز — تمامی حقوق محفوظ است.
+          © {new Date().getFullYear()} {school ? school.titleFa : 'مدارس چمران اهواز'} — تمامی حقوق محفوظ است.
         </p>
       </div>
     </footer>

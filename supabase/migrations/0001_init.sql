@@ -10,7 +10,13 @@ create extension if not exists "pgcrypto";
 create table if not exists public.classes (
   id          uuid primary key default gen_random_uuid(),
   name        text not null,
-  grade       text not null check (grade in ('elementary','first','second')),
+  -- پایهٔ مشخص: e1…e6 (ابتدایی), f7…f9 (متوسطهٔ اول), s10…s12 (متوسطهٔ دوم)
+  grade       text not null check (grade in
+                ('e1','e2','e3','e4','e5','e6','f7','f8','f9','s10','s11','s12')),
+  -- شمارهٔ کلاس داخل پایه (پایهٔ اول کلاس ۲)
+  class_no    int  not null default 1 check (class_no between 1 and 12),
+  -- رشته فقط برای متوسطهٔ دوم (ریاضی ۱ دهم، تجربی ۲ یازدهم)
+  track       text,
   gender      text not null check (gender in ('boys','girls')),
   subdomain   text not null,
   capacity    int  not null default 25 check (capacity between 1 and 100),
@@ -108,18 +114,34 @@ insert into public.teachers (name, subject, title, bio, subdomain, email, phone,
  ('فاطمه صادقی','مطالعات اجتماعی','معلم پایه','معلم مطالعات اجتماعی متوسطهٔ دوم.','ovyi','t6@chamranahvaz.ir','09126666666','شنبه تا چهارشنبه ۹ تا ۱۴')
 on conflict do nothing;
 
-insert into public.classes (name, grade, gender, subdomain, capacity) values
- ('الف','elementary','boys','ghjs',25),('ب','elementary','boys','ghjs',25),
- ('ج','elementary','boys','ghjs',28),('د','elementary','boys','ghjs',28),
- ('هـ','elementary','boys','ghjs',30),('و','elementary','boys','ghjs',30),
- ('الف','elementary','girls','dtga',25),('ب','elementary','girls','dtga',25),
- ('ج','elementary','girls','dtga',28),('د','elementary','girls','dtga',28),
- ('ز','first','boys','avel',30),('ح','first','boys','avel',30),
- ('ط','first','boys','avel',28),('ی','first','boys','avel',28),
- ('ز','first','girls','avvdy',30),('ح','first','girls','avvdy',30),
- ('ط','first','girls','avvdy',28),('ی','first','girls','avvdy',28),
- ('ک','second','boys','otv2',30),('ل','second','boys','otv2',30),
- ('م','second','boys','otv2',28),('ن','second','boys','otv2',28),
- ('ک','second','girls','ovyi',30),('ل','second','girls','ovyi',30),
- ('م','second','girls','ovyi',28),('ن','second','girls','ovyi',28)
+insert into public.classes (name, grade, class_no, track, gender, subdomain, capacity) values
+ -- دبستان پسرانه: ۶ پایه، شماره‌های متفاوت
+ ('پایهٔ اول کلاس ۱','e1',1,null,'boys','ghjs',25),
+ ('پایهٔ اول کلاس ۲','e1',2,null,'boys','ghjs',25),
+ ('پایهٔ دوم کلاس ۱','e2',1,null,'boys','ghjs',28),
+ ('پایهٔ سوم کلاس ۱','e3',1,null,'boys','ghjs',28),
+ ('پایهٔ چهارم کلاس ۱','e4',1,null,'boys','ghjs',30),
+ ('پایهٔ پنجم کلاس ۱','e5',1,null,'boys','ghjs',30),
+ ('پایهٔ ششم کلاس ۱','e6',1,null,'boys','ghjs',30),
+ -- دبستان دخترانه (جدا از پسرانه)
+ ('پایهٔ اول کلاس ۱','e1',1,null,'girls','dtga',25),
+ ('پایهٔ دوم کلاس ۱','e2',1,null,'girls','dtga',25),
+ ('پایهٔ سوم کلاس ۱','e3',1,null,'girls','dtga',28),
+ ('پایهٔ ششم کلاس ۱','e6',1,null,'girls','dtga',30),
+ -- متوسطهٔ اول پسرانه: هفتم تا نهم
+ ('پایهٔ هفتم کلاس ۱','f7',1,null,'boys','avel',30),
+ ('پایهٔ هشتم کلاس ۱','f8',1,null,'boys','avel',30),
+ ('پایهٔ نهم کلاس ۱','f9',1,null,'boys','avel',28),
+ ('پایهٔ نهم کلاس ۲','f9',2,null,'boys','avel',28),
+ -- متوسطهٔ اول دخترانه
+ ('پایهٔ هفتم کلاس ۱','f7',1,null,'girls','avvdy',30),
+ ('پایهٔ نهم کلاس ۱','f9',1,null,'girls','avvdy',30),
+ -- متوسطهٔ دوم پسرانه: پایه + رشته
+ ('ریاضی ۱ — پایهٔ دهم','s10',1,'ریاضی','boys','otv2',30),
+ ('تجربی ۱ — پایهٔ دهم','s10',1,'تجربی','boys','otv2',30),
+ ('تجربی ۲ — پایهٔ یازدهم','s11',2,'تجربی','boys','otv2',30),
+ ('ریاضی ۲ — پایهٔ دوازدهم','s12',2,'ریاضی','boys','otv2',28),
+ -- متوسطهٔ دوم دخترانه
+ ('ریاضی ۱ — پایهٔ دهم','s10',1,'ریاضی','girls','ovyi',30),
+ ('تجربی ۱ — پایهٔ یازدهم','s11',1,'تجربی','girls','ovyi',30)
 on conflict do nothing;

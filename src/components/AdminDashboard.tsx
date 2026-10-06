@@ -4,13 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ClassRow, TeacherRow } from '@/lib/data'
 import type { School } from '@/lib/schools'
-import { GRADE_LABELS } from '@/lib/schools'
+import { GRADE_LABELS, STAGE_GRADES, STAGE_LABELS, TRACKS } from '@/lib/schools'
 import { toPersianDigits } from '@/lib/utils'
 import { Plus, Pencil, Trash, Lock } from './admin-icons'
 
 type Tab = 'classes' | 'teachers'
 
-const EMPTY_CLASS = { name: '', grade: 'elementary', gender: 'boys', capacity: 25 }
+const EMPTY_CLASS = { grade: '', classNo: 1, track: '', capacity: 25 }
 const EMPTY_TEACHER = { name: '', subject: '', title: 'معلم پایه', email: '', phone: '', bio: '' }
 
 export default function AdminDashboard({
@@ -27,7 +27,19 @@ export default function AdminDashboard({
   const [classes, setClasses] = useState<ClassRow[]>(initialClasses)
   const [teachers, setTeachers] = useState<TeacherRow[]>(initialTeachers)
 
-  const [clsForm, setClsForm] = useState(EMPTY_CLASS)
+  // پایه‌های مجاز: فقط پایه‌های مقطع همین مدرسه
+  const stageGrades = STAGE_GRADES[school.stage]
+  const isSecond = school.stage === 'second'
+
+  const [clsForm, setClsForm] = useState<{
+    grade: string
+    classNo: number
+    track: string
+    capacity: number
+  }>({
+    ...EMPTY_CLASS,
+    grade: stageGrades[0],
+  })
   const [clsEditId, setClsEditId] = useState<string | null>(null)
   const [tchForm, setTchForm] = useState(EMPTY_TEACHER)
   const [tchEditId, setTchEditId] = useState<string | null>(null)
@@ -66,20 +78,35 @@ export default function AdminDashboard({
 
   async function submitClass(e: React.FormEvent) {
     e.preventDefault()
-    if (!clsForm.name.trim()) return notify('err', 'نام کلاس را وارد کنید.')
+    if (!clsForm.grade) return notify('err', 'پایه را انتخاب کنید.')
+    if (isSecond && !clsForm.track.trim())
+      return notify('err', 'برای متوسطهٔ دوم رشته را انتخاب کنید.')
     try {
       const data = await callApi('/api/admin/classes', {
         action: clsEditId ? 'update' : 'create',
         id: clsEditId ?? undefined,
-        class: clsForm,
+        class: {
+          grade: clsForm.grade,
+          classNo: Number(clsForm.classNo),
+          track: isSecond ? clsForm.track : null,
+          capacity: Number(clsForm.capacity),
+        },
       })
       setClasses(data.classes)
-      setClsForm(EMPTY_CLASS)
+      setClsForm({ ...EMPTY_CLASS, grade: stageGrades[0] })
       setClsEditId(null)
       notify('ok', clsEditId ? 'کلاس به‌روزرسانی شد.' : 'کلاس اضافه شد.')
       router.refresh()
     } catch (err) {
-      notify('err', err instanceof Error ? err.message : 'خطا در ذخیره‌سازی')
+      const text =
+        err instanceof Error && err.message === 'duplicate_class'
+          ? 'این کلاس (پایه + شماره + رشته) قبلاً ثبت شده است.'
+          : err instanceof Error && err.message === 'grade_not_in_stage'
+            ? 'این پایه به مقطع همین مدرسه تعلق ندارد.'
+            : err instanceof Error
+              ? err.message
+              : 'خطا در ذخیره‌سازی'
+      notify('err', text)
     }
   }
 
@@ -97,7 +124,12 @@ export default function AdminDashboard({
 
   function editClass(c: ClassRow) {
     setClsEditId(c.id)
-    setClsForm({ name: c.name, grade: c.grade, gender: c.gender, capacity: c.capacity })
+    setClsForm({
+      grade: c.grade,
+      classNo: c.classNo,
+      track: c.track ?? '',
+      capacity: c.capacity,
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -209,38 +241,44 @@ export default function AdminDashboard({
       {/* ---- فرم کلاس ---- */}
       {tab === 'classes' && (
         <form onSubmit={submitClass} className="card mt-6 grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-6">
-          <div className="sm:col-span-2">
-            <label className="mb-1 block text-xs font-semibold">نام کلاس</label>
-            <input
-              className="input"
-              value={clsForm.name}
-              onChange={(e) => setClsForm({ ...clsForm, name: e.target.value })}
-              placeholder="مثلاً الف"
-            />
-          </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">مقطع</label>
+            <label className="mb-1 block text-xs font-semibold">پایه</label>
             <select
               className="input"
               value={clsForm.grade}
-              onChange={(e) => setClsForm({ ...clsForm, grade: e.target.value as ClassRow['grade'] })}
+              onChange={(e) => setClsForm({ ...clsForm, grade: e.target.value })}
             >
-              {Object.entries(GRADE_LABELS).map(([k, v]) => (
-                <option key={k} value={k}>{v}</option>
+              {stageGrades.map((g) => (
+                <option key={g} value={g}>{GRADE_LABELS[g]}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">جنسیت</label>
-            <select
+            <label className="mb-1 block text-xs font-semibold">شمارهٔ کلاس</label>
+            <input
+              type="number"
+              min={1}
+              max={12}
               className="input"
-              value={clsForm.gender}
-              onChange={(e) => setClsForm({ ...clsForm, gender: e.target.value as ClassRow['gender'] })}
-            >
-              <option value="boys">پسرانه</option>
-              <option value="girls">دخترانه</option>
-            </select>
+              value={clsForm.classNo}
+              onChange={(e) => setClsForm({ ...clsForm, classNo: Number(e.target.value) })}
+            />
           </div>
+          {isSecond && (
+            <div>
+              <label className="mb-1 block text-xs font-semibold">رشته</label>
+              <select
+                className="input"
+                value={clsForm.track}
+                onChange={(e) => setClsForm({ ...clsForm, track: e.target.value })}
+              >
+                <option value="">— انتخاب رشته —</option>
+                {TRACKS.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <label className="mb-1 block text-xs font-semibold">ظرفیت</label>
             <input
@@ -251,18 +289,37 @@ export default function AdminDashboard({
               onChange={(e) => setClsForm({ ...clsForm, capacity: Number(e.target.value) })}
             />
           </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold">جنسیت</label>
+            <input
+              className="input bg-slate-50 text-slate-500 dark:bg-slate-900 dark:text-slate-400"
+              value={school.gender === 'boys' ? 'پسرانه (ثابت)' : 'دخترانه (ثابت)'}
+              disabled
+              readOnly
+            />
+          </div>
           <div className="flex items-end gap-2">
             <button type="submit" className="btn-primary w-full" disabled={busy}>
               <Plus className="h-4 w-4" />
               {clsEditId ? 'ذخیره' : 'افزودن'}
             </button>
           </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 sm:col-span-2 lg:col-span-6">
+            عنوان کلاس خودکار ساخته می‌شود: مثلاً{' '}
+            <b>
+              {GRADE_LABELS[clsForm.grade]}
+              {isSecond
+                ? ` ${clsForm.track || 'ریاضی'} ${toPersianDigits(clsForm.classNo)} — ${GRADE_LABELS[clsForm.grade]}`
+                : ` کلاس ${toPersianDigits(clsForm.classNo)}`}
+            </b>
+            {' '}— فقط پایه‌های {STAGE_LABELS[school.stage]} نمایش داده می‌شوند.
+          </p>
           {clsEditId && (
             <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 sm:col-span-2 lg:col-span-6">
               در حال ویرایش کلاس هستید — برای انصراف دکمهٔ «افزودن جدید» را بزنید.{' '}
               <button
                 type="button"
-                onClick={() => { setClsEditId(null); setClsForm(EMPTY_CLASS) }}
+                onClick={() => { setClsEditId(null); setClsForm({ ...EMPTY_CLASS, grade: stageGrades[0] }) }}
                 className="underline"
               >
                 افزودن جدید
@@ -279,8 +336,9 @@ export default function AdminDashboard({
             <thead>
               <tr className="border-b border-slate-200 text-right text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
                 <th className="p-4 font-bold">کلاس</th>
-                <th className="p-4 font-bold">مقطع</th>
-                <th className="p-4 font-bold">جنسیت</th>
+                <th className="p-4 font-bold">پایه</th>
+                <th className="p-4 font-bold">شماره</th>
+                {isSecond && <th className="p-4 font-bold">رشته</th>}
                 <th className="p-4 font-bold">ظرفیت</th>
                 <th className="p-4 font-bold">عملیات</th>
               </tr>
@@ -289,8 +347,9 @@ export default function AdminDashboard({
               {classes.map((c) => (
                 <tr key={c.id} className="border-b border-slate-100 last:border-0 dark:border-slate-800/70">
                   <td className="p-4 font-bold">{c.name}</td>
-                  <td className="p-4">{GRADE_LABELS[c.grade]}</td>
-                  <td className="p-4">{c.gender === 'boys' ? 'پسرانه' : 'دخترانه'}</td>
+                  <td className="p-4">{GRADE_LABELS[c.grade] ?? c.grade}</td>
+                  <td className="p-4">کلاس {toPersianDigits(c.classNo)}</td>
+                  {isSecond && <td className="p-4">{c.track ?? '—'}</td>}
                   <td className="p-4">{toPersianDigits(c.capacity)} نفر</td>
                   <td className="p-4">
                     <div className="flex gap-2">
@@ -314,7 +373,7 @@ export default function AdminDashboard({
               ))}
               {classes.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-slate-400">
+                  <td colSpan={isSecond ? 6 : 5} className="p-8 text-center text-slate-500 dark:text-slate-400">
                     هنوز کلاسی ثبت نشده است.
                   </td>
                 </tr>

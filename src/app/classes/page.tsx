@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export default async function ClassesPage() {
   const host = headers().get('host') ?? ''
   const sub = extractSubdomain(host) ?? 'ghjs'
-  const school = getSchool(sub)
+  const school = getSchool(sub)!
   const classes = await getClasses(sub)
 
   return (
@@ -24,7 +24,7 @@ export default async function ClassesPage() {
         </p>
       </div>
 
-      <ClassesExplorer initialClasses={classes} />
+      <ClassesExplorer initialClasses={classes} school={school} />
     </main>
   )
 }
