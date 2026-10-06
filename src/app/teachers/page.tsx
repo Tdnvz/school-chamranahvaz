@@ -19,7 +19,7 @@ export default async function TeachersPage() {
       <div className="mb-8">
         <span className="chip">{school?.titleFa ?? 'معلمین'}</span>
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight">معلمین</h1>
-        <p className="mt-2 max-w-2xl text-slate-600">
+        <p className="mt-2 max-w-2xl text-slate-600 dark:text-slate-400">
           اعضای هیئت علمی {school?.titleFa ?? 'مدرسه'} به همراه درس، سابقه و راه‌های تماس.
         </p>
       </div>

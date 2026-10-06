@@ -1,4 +1,5 @@
 import { getSupabase } from './supabase'
+import { readStore } from './store'
 
 export interface ClassRow {
   id: string
@@ -69,6 +70,10 @@ const SAMPLE_TEACHERS: TeacherRow[] = [
 /* ------------------------------------------------------------------ */
 
 export async function getClasses(subdomain: string): Promise<ClassRow[]> {
+  // ۱) دادهٔ ویرایش‌شده در پنل ادمین (فایل محلی)
+  const store = readStore(subdomain)
+  if (store) return store.classes
+  // ۲) Supabase
   const supabase = getSupabase()
   if (supabase) {
     const { data, error } = await supabase
@@ -84,6 +89,10 @@ export async function getClasses(subdomain: string): Promise<ClassRow[]> {
 }
 
 export async function getTeachers(subdomain: string): Promise<TeacherRow[]> {
+  // ۱) دادهٔ ویرایش‌شده در پنل ادمین (فایل محلی)
+  const store = readStore(subdomain)
+  if (store) return store.teachers
+  // ۲) Supabase
   const supabase = getSupabase()
   if (supabase) {
     const { data, error } = await supabase

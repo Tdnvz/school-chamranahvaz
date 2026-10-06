@@ -76,7 +76,7 @@ export default function TeachersExplorer({ initialTeachers }: { initialTeachers:
           </button>
         </div>
 
-        <div className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+        <div className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
           نمایش {toPersianDigits(filtered.length)} از {toPersianDigits(rows.length)} معلم
         </div>
       </div>
@@ -91,10 +91,10 @@ export default function TeachersExplorer({ initialTeachers }: { initialTeachers:
               </div>
               <h3 className="mt-3 text-base font-bold">{t.name}</h3>
               <p className="text-sm font-semibold text-school-600">{t.title}</p>
-              <p className="mt-1 text-xs text-slate-500">{t.subject}</p>
-              <p className="mt-3 text-xs leading-5 text-slate-600 line-clamp-3">{t.bio}</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{t.subject}</p>
+              <p className="mt-3 text-xs leading-5 text-slate-600 line-clamp-3 dark:text-slate-400">{t.bio}</p>
 
-              <ul className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 text-right text-xs text-slate-500">
+              <ul className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 text-right text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
                 <li className="flex items-center gap-2">
                   <Envelope className="h-4 w-4 shrink-0 text-school-500" />
                   <span className="truncate">{t.email}</span>
@@ -118,7 +118,7 @@ export default function TeachersExplorer({ initialTeachers }: { initialTeachers:
           ))}
         </div>
       ) : (
-        <div className="card mt-6 p-12 text-center text-slate-500">
+        <div className="card mt-6 p-12 text-center text-slate-500 dark:text-slate-400">
           معلمی با این مشخصات پیدا نشد.
         </div>
       )}

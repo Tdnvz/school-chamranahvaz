@@ -22,14 +22,27 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1b6ef5',
+  themeColor: [{ media: '(prefers-color-scheme: light)', color: '#1b6ef5' }, { media: '(prefers-color-scheme: dark)', color: '#0b1120' }],
   width: 'device-width',
   initialScale: 1,
 }
 
+// اعمال تم پیش از رندر اول — از پرش ناگهانی رنگ جلوگیری می‌کند
+const themeInit = `
+try {
+  var t = localStorage.getItem('theme');
+  var dark = t ? t === 'dark' : true; // پیش‌فرض: تاریک
+  if (dark) document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+} catch (e) {}
+`
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fa" dir="rtl" className={vazirmatn.variable}>
+    <html lang="fa" dir="rtl" className={vazirmatn.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+      </head>
       <body className="flex min-h-screen flex-col font-sans">
         <SiteHeader />
         {children}

@@ -102,7 +102,7 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
                 <h3 className="text-lg font-bold">کلاس {c.name}</h3>
                 <span className="chip">{GRADE_LABELS[c.grade]}</span>
               </div>
-              <dl className="mt-4 space-y-2 text-sm text-slate-600">
+              <dl className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-school-500" />
                   <dt className="sr-only">مقطع</dt>
@@ -114,7 +114,7 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
                   <dd>ظرفیت: {formatNumber(c.capacity)} نفر</dd>
                 </div>
               </dl>
-              <div className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+              <div className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
                 {c.gender === 'boys' ? 'پسرانه' : 'دخترانه'}
                 {c.teacher_id ? ' • معلم تعیین‌شده' : ' • بدون معلم'}
               </div>
@@ -122,7 +122,7 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
           ))}
         </div>
       ) : (
-        <div className="card mt-6 p-12 text-center text-slate-500">
+        <div className="card mt-6 p-12 text-center text-slate-500 dark:text-slate-400">
           نتیجه‌ای پیدا نشد. عبارت دیگری را امتحان کنید.
         </div>
       )}
@@ -144,7 +144,7 @@ export default function ClassesExplorer({ initialClasses }: { initialClasses: Cl
               className={
                 p === current
                   ? 'rounded-xl bg-school-600 px-3.5 py-2 text-sm font-semibold text-white'
-                  : 'rounded-xl bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50'
+                  : 'rounded-xl bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700'
               }
             >
               {toPersianDigits(p)}

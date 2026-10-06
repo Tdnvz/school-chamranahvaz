@@ -18,7 +18,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
             {school.titleFa}
           </h1>
-          <p className="mt-4 text-lg leading-8 text-slate-600">{school.descriptionFa}</p>
+          <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-400">{school.descriptionFa}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link href="/classes" className="btn-primary">
               <BookOpen className="h-5 w-5" />
@@ -43,7 +43,7 @@ export default function HomePage() {
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
           مدارس چمران اهواز
         </h1>
-        <p className="mt-4 text-lg leading-8 text-slate-600">
+        <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-400">
           شش مدرسه، یک خانوادهٔ آموزشی. مقطع و جنسیت خود را انتخاب کنید تا وارد
           وب‌سایت اختصاصی آن مدرسه شوید.
         </p>
@@ -61,14 +61,14 @@ export default function HomePage() {
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-lg font-bold">{s.titleFa}</h2>
-                  <p className="mt-1 text-sm text-slate-500">{s.titleEn}</p>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{s.titleEn}</p>
                 </div>
                 <span className="chip">{s.stage === 'elementary' ? 'ابتدایی' : s.stage === 'first' ? 'اول' : 'دوم'}</span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{s.descriptionFa}</p>
-              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
-                <code className="text-xs text-slate-400">{s.domain}</code>
-                <span className="text-sm font-semibold text-school-600 group-hover:translate-x-[-4px] transition">
+              <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">{s.descriptionFa}</p>
+              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
+                <code className="text-xs text-slate-400 dark:text-slate-500">{s.domain}</code>
+                <span className="text-sm font-semibold text-school-600 group-hover:translate-x-[-4px] transition dark:text-school-400">
                   ورود ←
                 </span>
               </div>
@@ -77,7 +77,7 @@ export default function HomePage() {
         ))}
       </div>
 
-      <p className="mt-10 text-center text-xs text-slate-400">
+      <p className="mt-10 text-center text-xs text-slate-400 dark:text-slate-500">
         دامنهٔ اصلی: {BASE_DOMAIN}
       </p>
     </main>
