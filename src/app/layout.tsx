@@ -39,18 +39,31 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: [{ media: '(prefers-color-scheme: light)', color: '#1b6ef5' }, { media: '(prefers-color-scheme: dark)', color: '#0b1120' }],
+  // رنگ پیش‌فرض نوار مرورگر (بلافاصله با اسکریپت زیر با تم سایت هم‌رنگ می‌شود)
+  themeColor: '#0b1120',
   width: 'device-width',
   initialScale: 1,
+  // پشتیبانی از ناحیهٔ امن گوشی‌های ناچ‌دار و حالت تمام‌صفحه
+  viewportFit: 'cover',
 }
 
 // اعمال تم پیش از رندر اول — از پرش ناگهانی رنگ جلوگیری می‌کند
+// و رنگ نوار مرورگر (استاتوس‌بار iOS / نوار آدرس اندروید) را هم با تم سایت هم‌رنگ می‌کند
+const THEME_BG_DARK = '#0b1120'
+const THEME_BG_LIGHT = '#f6f8fb'
 const themeInit = `
 try {
   var t = localStorage.getItem('theme');
   var dark = t ? t === 'dark' : true; // پیش‌فرض: تاریک
-  if (dark) document.documentElement.classList.add('dark');
-  else document.documentElement.classList.remove('dark');
+  var root = document.documentElement;
+  if (dark) root.classList.add('dark'); else root.classList.remove('dark');
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (!m) {
+    m = document.createElement('meta');
+    m.setAttribute('name', 'theme-color');
+    document.head.appendChild(m);
+  }
+  m.setAttribute('content', dark ? '${THEME_BG_DARK}' : '${THEME_BG_LIGHT}');
 } catch (e) {}
 `
 
