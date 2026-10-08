@@ -53,20 +53,47 @@ export default function SiteFooter() {
           <h3 className="text-sm font-bold">ارتباط</h3>
           <ul className="mt-3 space-y-1.5 text-sm text-slate-500 dark:text-slate-400">
             <li>اهواز، خیابان چمران</li>
-            <li>۰۶۱-۱۲۳۴۵۶۷۸</li>
-            <li>info@{BASE_DOMAIN}</li>
+            <li>
+              <a
+                href="mailto:info@tdnvzgg66.shop"
+                className="transition hover:text-school-600 dark:hover:text-school-400"
+                dir="ltr"
+              >
+                info@{BASE_DOMAIN}
+              </a>
+            </li>
           </ul>
-          <Link
-            href="/admin"
-            className="mt-3 inline-block text-sm font-semibold text-school-600 transition hover:text-school-700 dark:text-school-400 dark:hover:text-school-300"
-          >
-            پنل مدیریت ←
-          </Link>
+          <div className="mt-3 space-y-1">
+            <Link
+              href="/privacy"
+              className="block text-sm font-semibold text-school-600 transition hover:text-school-700 dark:text-school-400 dark:hover:text-school-300"
+            >
+              حریم خصوصی ←
+            </Link>
+            <Link
+              href="/terms"
+              className="block text-sm font-semibold text-school-600 transition hover:text-school-700 dark:text-school-400 dark:hover:text-school-300"
+            >
+              قوانین و مقررات ←
+            </Link>
+            <Link
+              href="/cookies"
+              className="block text-sm font-semibold text-school-600 transition hover:text-school-700 dark:text-school-400 dark:hover:text-school-300"
+            >
+              سیاست کوکی ←
+            </Link>
+            <Link
+              href="/admin"
+              className="mt-2 block text-sm text-slate-500 transition hover:text-school-600 dark:text-slate-400 dark:hover:text-school-400"
+            >
+              پنل مدیریت ←
+            </Link>
+          </div>
         </div>
       </div>
 
       <div className="border-t border-slate-100 py-4 dark:border-slate-800">
-        <p className="container-page text-center text-xs text-slate-400 dark:text-slate-500">
+        <p className="container-page text-center text-xs text-slate-500 dark:text-slate-400">
           © {new Date().getFullYear()} {school ? school.titleFa : 'مدارس چمران اهواز'} — تمامی حقوق محفوظ است.
         </p>
       </div>

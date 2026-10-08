@@ -142,6 +142,7 @@ export default function ClassesExplorer({
             className="btn-ghost"
             disabled={current <= 1}
             onClick={() => setPage(current - 1)}
+            aria-label="صفحهٔ قبلی"
           >
             قبلی
           </button>
@@ -149,6 +150,8 @@ export default function ClassesExplorer({
             <button
               key={p}
               onClick={() => setPage(p)}
+              aria-label={`رفتن به صفحهٔ ${p}`}
+              aria-current={p === current ? 'page' : undefined}
               className={
                 p === current
                   ? 'rounded-xl bg-school-600 px-3.5 py-2 text-sm font-semibold text-white'
@@ -162,6 +165,7 @@ export default function ClassesExplorer({
             className="btn-ghost"
             disabled={current >= pages}
             onClick={() => setPage(current + 1)}
+            aria-label="صفحهٔ بعدی"
           >
             بعدی
           </button>

@@ -120,6 +120,9 @@ export default function TeachersExplorer({ initialTeachers }: { initialTeachers:
       ) : (
         <div className="card mt-6 p-12 text-center text-slate-500 dark:text-slate-400">
           معلمی با این مشخصات پیدا نشد.
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            فهرست معلمین توسط مدیر مدرسه به‌روزرسانی می‌شود — برای موارد فوری از اطلاعات تماس در فوتر استفاده کنید.
+          </p>
         </div>
       )}
     </div>

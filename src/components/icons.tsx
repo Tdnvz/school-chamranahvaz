@@ -1,4 +1,4 @@
-// آیکون‌های سبک (SVG) — بدون وابستگی خارجی
+// آیکون‌های سبک (SVG) — بدون وابستگی خارجی، تزئینی (aria-hidden: اسکرین‌ریدر نمی‌خواند)
 type P = { className?: string }
 
 const base = {
@@ -8,7 +8,8 @@ const base = {
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
   viewBox: '0 0 24 24',
-}
+  'aria-hidden': true,
+} as const
 
 export const School = ({ className }: P) => (
   <svg {...base} className={className}>

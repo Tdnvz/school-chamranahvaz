@@ -242,8 +242,9 @@ export default function AdminDashboard({
       {tab === 'classes' && (
         <form onSubmit={submitClass} className="card mt-6 grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-6">
           <div>
-            <label className="mb-1 block text-xs font-semibold">پایه</label>
+            <label htmlFor="cls-grade" className="mb-1 block text-xs font-semibold">پایه</label>
             <select
+              id="cls-grade"
               className="input"
               value={clsForm.grade}
               onChange={(e) => setClsForm({ ...clsForm, grade: e.target.value })}
@@ -254,8 +255,9 @@ export default function AdminDashboard({
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">شمارهٔ کلاس</label>
+            <label htmlFor="cls-no" className="mb-1 block text-xs font-semibold">شمارهٔ کلاس</label>
             <input
+              id="cls-no"
               type="number"
               min={1}
               max={12}
@@ -266,8 +268,9 @@ export default function AdminDashboard({
           </div>
           {isSecond && (
             <div>
-              <label className="mb-1 block text-xs font-semibold">رشته</label>
+              <label htmlFor="cls-track" className="mb-1 block text-xs font-semibold">رشته</label>
               <select
+                id="cls-track"
                 className="input"
                 value={clsForm.track}
                 onChange={(e) => setClsForm({ ...clsForm, track: e.target.value })}
@@ -280,8 +283,9 @@ export default function AdminDashboard({
             </div>
           )}
           <div>
-            <label className="mb-1 block text-xs font-semibold">ظرفیت</label>
+            <label htmlFor="cls-capacity" className="mb-1 block text-xs font-semibold">ظرفیت</label>
             <input
+              id="cls-capacity"
               type="number"
               min={1}
               className="input"
@@ -290,8 +294,9 @@ export default function AdminDashboard({
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">جنسیت</label>
+            <label htmlFor="cls-gender" className="mb-1 block text-xs font-semibold">جنسیت</label>
             <input
+              id="cls-gender"
               className="input bg-slate-50 text-slate-500 dark:bg-slate-900 dark:text-slate-400"
               value={school.gender === 'boys' ? 'پسرانه (ثابت)' : 'دخترانه (ثابت)'}
               disabled
@@ -386,8 +391,9 @@ export default function AdminDashboard({
       {tab === 'teachers' && (
         <form onSubmit={submitTeacher} className="card mt-6 grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <label className="mb-1 block text-xs font-semibold">نام و نام خانوادگی</label>
+            <label htmlFor="tch-name" className="mb-1 block text-xs font-semibold">نام و نام خانوادگی</label>
             <input
+              id="tch-name"
               className="input"
               value={tchForm.name}
               onChange={(e) => setTchForm({ ...tchForm, name: e.target.value })}
@@ -395,8 +401,9 @@ export default function AdminDashboard({
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">درس</label>
+            <label htmlFor="tch-subject" className="mb-1 block text-xs font-semibold">درس</label>
             <input
+              id="tch-subject"
               className="input"
               value={tchForm.subject}
               onChange={(e) => setTchForm({ ...tchForm, subject: e.target.value })}
@@ -404,8 +411,9 @@ export default function AdminDashboard({
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">سمت</label>
+            <label htmlFor="tch-title" className="mb-1 block text-xs font-semibold">سمت</label>
             <input
+              id="tch-title"
               className="input"
               value={tchForm.title}
               onChange={(e) => setTchForm({ ...tchForm, title: e.target.value })}
@@ -413,20 +421,24 @@ export default function AdminDashboard({
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">ایمیل</label>
+            <label htmlFor="tch-email" className="mb-1 block text-xs font-semibold">ایمیل</label>
             <input
+              id="tch-email"
               className="input"
               dir="ltr"
+              type="email"
               value={tchForm.email}
               onChange={(e) => setTchForm({ ...tchForm, email: e.target.value })}
               placeholder="teacher@…"
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-semibold">تلفن</label>
+            <label htmlFor="tch-phone" className="mb-1 block text-xs font-semibold">تلفن</label>
             <input
+              id="tch-phone"
               className="input"
               dir="ltr"
+              type="tel"
               value={tchForm.phone}
               onChange={(e) => setTchForm({ ...tchForm, phone: e.target.value })}
               placeholder="0912…"
@@ -438,9 +450,26 @@ export default function AdminDashboard({
               {tchEditId ? 'ذخیره' : 'افزودن'}
             </button>
           </div>
+          <label className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 sm:col-span-2 lg:col-span-3">
+            <input
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 shrink-0 rounded accent-school-600"
+            />
+            <span>
+              می‌پذیرم که مسئولیت صحت اطلاعاتی که ثبت می‌کنم با من است و انتشار آن تابع{' '}
+              <a href="/terms" target="_blank" className="font-semibold text-school-600 underline dark:text-school-400">
+                قوانین و مقررات
+              </a>{' '}و{' '}
+              <a href="/privacy" target="_blank" className="font-semibold text-school-600 underline dark:text-school-400">
+                حریم خصوصی
+              </a>{' '}سایت است.
+            </span>
+          </label>
           <div className="sm:col-span-2 lg:col-span-3">
-            <label className="mb-1 block text-xs font-semibold">توضیح (اختیاری)</label>
+            <label htmlFor="tch-bio" className="mb-1 block text-xs font-semibold">توضیح (اختیاری)</label>
             <textarea
+              id="tch-bio"
               className="input min-h-[72px]"
               value={tchForm.bio}
               onChange={(e) => setTchForm({ ...tchForm, bio: e.target.value })}
