@@ -1,21 +1,22 @@
 # /etc/nginx/sites-available/school-chamranahvaz
-# audit fixes 2026-10-09: HSTS (F-006) + limit_req on admin login (F-005)
+# دامنهٔ جدید mdresx.fun (مهاجرت 2026-10-09) — هر ۶ ساب‌دامنه
+# حفظ اصلاحات آدیت: HSTS (F-006) + limit_req on admin login (F-005)
 
 server {
     listen 80;
-    server_name ghjs.tdnvzgg66.shop dtga.tdnvzgg66.shop avel.tdnvzgg66.shop avvdy.tdnvzgg66.shop otv2.tdnvzgg66.shop ovyi.tdnvzgg66.shop;
+    server_name ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 8443 ssl;
     http2 on;
-    server_name ghjs.tdnvzgg66.shop dtga.tdnvzgg66.shop avel.tdnvzgg66.shop avvdy.tdnvzgg66.shop otv2.tdnvzgg66.shop ovyi.tdnvzgg66.shop;
+    server_name ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
 
-    ssl_certificate /root/.acme.sh/tdnvzgg66.shop_ecc/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/tdnvzgg66.shop_ecc/tdnvzgg66.shop.key;
+    ssl_certificate /root/.acme.sh/mdresx.fun_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/mdresx.fun_ecc/mdresx.fun.key;
 
-    # HSTS — رفع F-006 (حداقل ۶ ماه؛ بعد از تأیید کارکرد قابل افزایش به ۱ سال)
+    # HSTS — رفع F-006
     add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
 
     # rate limit روی لاگین ادمین — رفع F-005 (5r/m، burst 3؛ 429 در تجاوز)

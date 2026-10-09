@@ -55,7 +55,7 @@ export default function SiteFooter() {
             <li>اهواز، خیابان چمران</li>
             <li>
               <a
-                href="mailto:info@tdnvzgg66.shop"
+                href="mailto:info@mdresx.fun"
                 className="transition hover:text-school-600 dark:hover:text-school-400"
                 dir="ltr"
               >

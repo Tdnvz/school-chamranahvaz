@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // حذف هدر X-Powered-By (hardening آدیت 2026-10-09): انگشت‌نگاری نسخهٔ فریم‌ورک ارسال نشود
+  poweredByHeader: false,
   images: {
     // اصلاح آدیت 2026-10-09 (F-001): بهینه‌ساز تصویر خاموش — هیچ <Image> استفاده نشده؛
     // این سطح حمله (RCE/DoS بدون احراز هویت در GHSA-2xp9-vwfh-vxw4) تا آپدیت Next بسته می‌شود

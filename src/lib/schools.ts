@@ -14,7 +14,7 @@ export interface School {
   color: string
 }
 
-export const BASE_DOMAIN = 'tdnvzgg66.shop'
+export const BASE_DOMAIN = 'mdresx.fun'
 
 export const SCHOOLS: School[] = [
   {
