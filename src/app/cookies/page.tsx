@@ -4,7 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'سیاست کوکی',
   description:
-    'سیاست کوکی وب‌سایت مدارس چمران اهواز — فهرست کوکی‌هایی که این سایت استفاده می‌کند و توضیح بنر رضایت.',
+    'سیاست کوکی وب‌سایت متوسطهٔ دوم پسرانهٔ چمران اهواز — فهرست کوکی‌هایی که این سایت استفاده می‌کند و توضیح بنر رضایت.',
 }
 
 export default function CookiesPage() {

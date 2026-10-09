@@ -41,11 +41,10 @@ export default function HomePage() {
       <div className="mx-auto max-w-3xl text-center">
         <span className="chip mx-auto mb-6">وب‌سایت رسمی</span>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-          مدارس چمران اهواز
+          متوسطهٔ دوم پسرانهٔ چمران اهواز
         </h1>
         <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-400">
-          شش مدرسه، یک خانوادهٔ آموزشی. مقطع و جنسیت خود را انتخاب کنید تا وارد
-          وب‌سایت اختصاصی آن مدرسه شوید.
+          وب‌سایت اختصاصی مدرسه — کلاس‌ها و معلمین، پایه‌های دهم تا دوازدهم.
         </p>
       </div>
 

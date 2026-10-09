@@ -5,7 +5,7 @@ import { BASE_DOMAIN } from '@/lib/schools'
 export const metadata: Metadata = {
   title: 'حریم خصوصی',
   description:
-    'سیاست حریم خصوصی وب‌سایت مدارس چمران اهواز — اینترنت کجا چه داده‌ای جمع می‌شود و چگونه استفاده می‌شود.',
+    'سیاست حریم خصوصی وب‌سایت متوسطهٔ دوم پسرانهٔ چمران اهواز — اینترنت کجا چه داده‌ای جمع می‌شود و چگونه استفاده می‌شود.',
 }
 
 export default function PrivacyPage() {

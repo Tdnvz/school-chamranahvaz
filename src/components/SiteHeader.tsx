@@ -26,7 +26,7 @@ export default function SiteHeader() {
           </span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate text-sm font-bold">
-              {school ? school.titleFa : 'مدارس چمران اهواز'}
+              {school ? school.titleFa : 'متوسطهٔ دوم پسرانهٔ چمران اهواز'}
             </span>
             <span className="block truncate text-[11px] text-slate-500 dark:text-slate-400" dir="ltr">
               {school ? school.domain : BASE_DOMAIN}

@@ -17,22 +17,22 @@ export async function generateMetadata(): Promise<Metadata> {
     ? `${school.titleFa} چمران اهواز — ${STAGE_LABELS[school.stage]}، ${
         school.gender === 'boys' ? 'ویژهٔ پسران' : 'ویژهٔ دختران'
       }`
-    : 'وب‌سایت رسمی مدارس چمران اهواز — دبستان و متوسطهٔ اول و دوم، پسرانه و دخترانه'
+    : 'وب‌سایت رسمی متوسطهٔ دوم پسرانهٔ چمران اهواز — پایه‌های دهم تا دوازدهم'
 
   return {
     metadataBase: new URL(`https://${BASE_DOMAIN}`),
     title: {
-      default: school ? school.titleFa : 'مدارس چمران اهواز',
-      template: `%s | ${school ? school.titleFa : 'مدارس چمران اهواز'}`,
+      default: school ? school.titleFa : 'متوسطهٔ دوم پسرانهٔ چمران اهواز',
+      template: `%s | ${school ? school.titleFa : 'متوسطهٔ دوم پسرانهٔ چمران اهواز'}`,
     },
     description,
     keywords: school
       ? ['مدرسه', 'چمران', 'اهواز', school.titleFa, STAGE_LABELS[school.stage], 'کلاس', 'معلم']
-      : ['مدرسه', 'چمران', 'اهواز', 'دبستان', 'متوسطه', 'کلاس', 'معلم'],
+      : ['مدرسه', 'چمران', 'اهواز', 'متوسطهٔ دوم', 'پسرانه', 'کلاس', 'معلم'],
     openGraph: {
       type: 'website',
       locale: 'fa_IR',
-      siteName: school ? school.titleFa : 'مدارس چمران اهواز',
+      siteName: school ? school.titleFa : 'متوسطهٔ دوم پسرانهٔ چمران اهواز',
       description,
     },
   }

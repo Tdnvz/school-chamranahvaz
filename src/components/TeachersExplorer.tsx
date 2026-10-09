@@ -111,7 +111,7 @@ export default function TeachersExplorer({ initialTeachers }: { initialTeachers:
                 )}
                 <li className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 shrink-0 text-school-500" />
-                  <span>مدارس چمران اهواز</span>
+                  <span>چمران اهواز</span>
                 </li>
               </ul>
             </article>
