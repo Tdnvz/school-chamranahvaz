@@ -4,6 +4,7 @@ import {
   createSessionToken,
   SESSION_COOKIE,
 } from '@/lib/auth'
+import { extractSubdomain } from '@/lib/utils'
 
 /** POST /api/admin/login — ورود با نام کاربری و رمز عبور */
 export async function POST(request: NextRequest) {
@@ -26,7 +27,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'invalid_credentials' }, { status: 401 })
   }
 
-  const token = await createSessionToken()
+  // نشست مقید به ساب‌دامنهٔ مدرسهٔ جاری (رفع F-004)
+  const sub = extractSubdomain((request.headers.get('host') ?? ''))
+  const token = await createSessionToken(sub ?? '')
   const isSecure = request.nextUrl.protocol === 'https:'
   const res = NextResponse.json({ ok: true })
   res.cookies.set(SESSION_COOKIE, token, {

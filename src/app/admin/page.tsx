@@ -12,14 +12,13 @@ export const metadata: Metadata = { title: 'پنل مدیریت' }
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
-  // دفاع در عمق — middleware هم جداگانه چک می‌کند
-  const token = (await cookies()).get(SESSION_COOKIE)?.value
-  if (!(await verifySessionToken(token))) redirect('/admin/login')
-
   const host = (await headers()).get('host') ?? ''
   const sub = extractSubdomain(host)
   const school = sub ? getSchool(sub) : null
   if (!sub || !school) redirect('/admin/login')
+  // دفاع در عمق — middleware هم جداگانه چک می‌کند؛ نشست مقید به ساب‌دامنه (رفع F-004)
+  const token = (await cookies()).get(SESSION_COOKIE)?.value
+  if (!(await verifySessionToken(token, sub))) redirect('/admin/login')
 
   const [classes, teachers] = await Promise.all([getClasses(sub), getTeachers(sub)])
 

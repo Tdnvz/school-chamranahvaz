@@ -1,3 +1,4 @@
+# /etc/systemd/system/school-chamranahvaz.service
 [Unit]
 Description=Chamran Ahvaz school website (Next.js production)
 After=network.target
@@ -10,6 +11,8 @@ Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
 Environment=HOSTNAME=0.0.0.0
+# secrets (0600): ADMIN_SESSION_SECRET / ADMIN_PASSWORD_HASH / ADMIN_PASSWORD_SALT / ADMIN_USERNAME
+EnvironmentFile=/etc/school-chamranahvaz.env
 
 [Install]
 WantedBy=multi-user.target

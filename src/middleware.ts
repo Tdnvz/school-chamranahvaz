@@ -26,7 +26,9 @@ export async function middleware(request: NextRequest) {
 
   if (needsAuth) {
     const token = request.cookies.get(SESSION_COOKIE)?.value
-    const ok = await verifySessionToken(token)
+    // نشست فقط برای ساب‌دامنهٔ جاری معتبر است (رفع F-004)
+    const hostSub = SUBDOMAINS.includes(first) ? first : undefined
+    const ok = await verifySessionToken(token, hostSub)
     if (!ok) {
       if (path.startsWith('/api/')) {
         return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
