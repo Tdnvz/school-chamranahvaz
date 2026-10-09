@@ -30,7 +30,8 @@ export function extractSubdomain(host: string): string | null {
   const parts = clean.split('.')
   if (parts.length < 3) return null
   const candidate = parts[0]
-  if (candidate === 'www' || candidate === 'app' || candidate === 'api') return null
+  if (candidate === 'www' || candidate === 'app' || candidate === 'api' ||
+      candidate === 'madrese' || candidate === 'panel') return null
   return candidate
 }
 

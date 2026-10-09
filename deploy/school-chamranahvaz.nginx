@@ -4,14 +4,14 @@
 
 server {
     listen 80;
-    server_name ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
+    server_name madrese.mdresx.fun panel.mdresx.fun ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 8443 ssl;
     http2 on;
-    server_name ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
+    server_name madrese.mdresx.fun panel.mdresx.fun ghjs.mdresx.fun dtga.mdresx.fun avel.mdresx.fun avvdy.mdresx.fun otv2.mdresx.fun ovyi.mdresx.fun;
 
     ssl_certificate /root/.acme.sh/mdresx.fun_ecc/fullchain.cer;
     ssl_certificate_key /root/.acme.sh/mdresx.fun_ecc/mdresx.fun.key;

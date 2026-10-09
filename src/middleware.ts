@@ -47,8 +47,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // دامنهٔ اصلی یا www → لندینگ
+  // madrese = لندینگ کل مدرسه، panel = پنل ادمین مرکزی — هر دو مثل دامنهٔ اصلی رفتار می‌کنند
   const isBase =
-    host === BASE_DOMAIN || host === `www.${BASE_DOMAIN}` || first === 'localhost' || first === '127'
+    host === BASE_DOMAIN || host === `www.${BASE_DOMAIN}` ||
+    first === 'madrese' || first === 'panel' ||
+    first === 'localhost' || first === '127'
 
   if (isBase) {
     return NextResponse.next()
