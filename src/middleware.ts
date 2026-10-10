@@ -4,8 +4,8 @@ import { SESSION_COOKIE, verifySessionToken } from '@/lib/auth'
 
 /**
  * تشخیص ساب‌دامنه از روی هاست:
- * ghjs.mdresx.fun  → ساب‌دامنهٔ معتبر
- * mdresx.fun       → دامنهٔ اصلی (لندینگ)
+ * ghjs.mdresx.online  → ساب‌دامنهٔ معتبر
+ * mdresx.online       → دامنهٔ اصلی (لندینگ)
  *
  * محافظت پنل ادمین:
  * /admin و /api/admin (به‌جز login/logout) نشست معتبر می‌خواهند.

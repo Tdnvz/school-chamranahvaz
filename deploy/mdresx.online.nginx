@@ -1,0 +1,75 @@
+# /etc/nginx/sites-available/mdresx.online
+# دامنهٔ جدید mdresx.online — مهاجرت کامل سرویس‌ها (2026-10-10)
+
+# ---- مدرسه (madrese/panel/otv2) ----
+server {
+    listen 80;
+    server_name madrese.mdresx.online panel.mdresx.online otv2.mdresx.online;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 8443 ssl;
+    http2 on;
+    server_name madrese.mdresx.online panel.mdresx.online otv2.mdresx.online;
+    ssl_certificate /root/.acme.sh/mdresx.online_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/mdresx.online_ecc/mdresx.online.key;
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+    location = /api/admin/login {
+        limit_req zone=admin_login burst=3 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:3111;
+        proxy_set_header Host $host;
+    }
+    location / {
+        proxy_pass http://127.0.0.1:3111;
+        proxy_set_header Host $host;
+    }
+}
+
+# ---- marzban (marzban/sub) ----
+server {
+    listen 80;
+    server_name marzban.mdresx.online sub.mdresx.online;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 8443 ssl;
+    http2 on;
+    server_name marzban.mdresx.online sub.mdresx.online;
+    ssl_certificate /root/.acme.sh/mdresx.online_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/mdresx.online_ecc/mdresx.online.key;
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+    }
+}
+
+# ---- jb + sublink (ساب‌لینک‌ها) ----
+server {
+    listen 80;
+    server_name jb.mdresx.online sublink.mdresx.online;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+    }
+}
+
+# ---- apex/www (لندینگ — مثل مدرسه) ----
+server {
+    listen 80;
+    server_name mdresx.online www.mdresx.online;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 8443 ssl;
+    http2 on;
+    server_name mdresx.online www.mdresx.online;
+    ssl_certificate /root/.acme.sh/mdresx.online_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/mdresx.online_ecc/mdresx.online.key;
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+    location / {
+        proxy_pass http://127.0.0.1:3111;
+        proxy_set_header Host $host;
+    }
+}
